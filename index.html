@@ -5,7 +5,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>ClearLex</title>
 		<link rel="stylesheet" href="./style.css" />
-		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link
+			rel="shortcut icon"
+			href="./images/favicon.ico"
+			type="image/x-icon"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
 		<script
 			src="https://kit.fontawesome.com/09259f818e.js"
 			crossorigin="anonymous"
@@ -13,10 +23,14 @@
 	</head>
 	<body>
 		<nav>
-			<img src="" alt="" />
+			<a href="./index.html">
+				<img src="./images/dictionary.png" alt="" />
+			</a>
 			<h1>Welcome To <span>ClearLex</span></h1>
-			<button id="history">History</button>
-			<button id="search">Search</button>
+			<div class="buttons">
+				<button id="history">History</button>
+				<button id="search">Search</button>
+			</div>
 		</nav>
 		<div class="search-container">
 			<h3>Search For A New Word</h3>
@@ -32,7 +46,6 @@
 			<h3>Your History:</h3>
 			<div class="words"></div>
 		</div>
-
 		<script src="./index.js"></script>
 	</body>
 </html>

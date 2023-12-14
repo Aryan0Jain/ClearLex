@@ -46,7 +46,7 @@ async function searchAndDisplay(word) {
 function addToStorage(obj) {
 	let words = JSON.parse(localStorage.getItem("searches"));
 	let i = words.findIndex((item) => item.word == obj.word);
-	if (i == -1) words.splice(i, 1);
+	if (i != -1) words.splice(i, 1);
 	words = [obj, ...words];
 	localStorage.setItem("searches", JSON.stringify(words));
 }
