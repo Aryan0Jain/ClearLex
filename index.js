@@ -11,15 +11,20 @@ if (!localStorage.getItem("searches"))
 	localStorage.setItem("searches", JSON.stringify([]));
 
 searchInput.addEventListener("input", () => {
-	result.innerHTML = "";
+	result.innerHTML = "Waiting...";
 });
 function searchWord() {
 	let word = searchInput.value;
+	result.innerHTML = "Finding...";
 	if (word == "") {
 		// result.style.display = "block"
-		result.innerHTML = "Please Enter A Word!!";
+		result.innerHTML = "Please Enter A Word!";
+		result.classList.add("error");
+		result.classList.remove("correct");
 		return;
 	}
+	result.classList.add("correct");
+	result.classList.remove("error");
 	searchInput.value = "";
 	searchAndDisplay(word);
 }
@@ -40,6 +45,9 @@ async function searchAndDisplay(word) {
 		displayWord(wordObj);
 	} catch (e) {
 		console.log(e);
+		result.innerHTML = `No such word found: ${word}`;
+		result.classList.add("error");
+		result.classList.remove("correct");
 	}
 }
 
@@ -57,14 +65,14 @@ function displayWord({ word, meaning, audio, example }) {
             <i class="fa-solid fa-play"></i>
         </button>
     `;
-	let exampleHtml = `<p class="example">${example}</p>`;
+	let exampleHtml = `<p class="example"><span>Example: </span>${example}</p>`;
 	let html = `
         <div class="header">
             <h2>${word}</h2>
-            ${audio ? audioHtml : ""}
+            ${audio ? '<p class="audio">' + audioHtml + "</p>" : ""}
         </div>
         <p class="meaning">
-            ${meaning}
+            <span>Meaning: </span>${meaning}
         </p>
         ${example && exampleHtml}
     `;
@@ -78,6 +86,7 @@ historyTab.addEventListener("click", () => {
 	historyTab.style.display = "none";
 	searchTab.style.display = "block";
 	searchContainer.style.display = "none";
+	result.style.display = "none";
 	historyContainer.style.display = "block";
 	displayHistory();
 });
@@ -85,8 +94,9 @@ searchTab.addEventListener("click", () => {
 	searchTab.style.display = "none";
 	historyTab.style.display = "block";
 	searchContainer.style.display = "block";
+	result.style.display = "flex";
 	historyContainer.style.display = "none";
-	result.innerHTML = "";
+	// result.innerHTML = "";
 });
 
 function displayHistory() {
@@ -96,12 +106,12 @@ function displayHistory() {
 		html += `
             <div class="word">
                 <p class="title">${word}</p>
+				<button class="delete" id=${index}>
+					<i class="fa-regular fa-trash-can"></i>
+				</button>
                 <p class="meaning">
                     ${meaning}
                 </p>
-                <button class="delete" id=${index}>
-                    <i class="fa-regular fa-trash-can"></i>
-                </button>
             </div>
         `;
 	});
