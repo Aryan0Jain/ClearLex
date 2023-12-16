@@ -7,6 +7,7 @@ const searchTab = document.querySelector("#search");
 const searchContainer = document.querySelector(".search-container");
 const confirmBox = document.querySelector(".confirm");
 const URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+const randomWordButton = document.getElementById("random");
 
 if (!localStorage.getItem("searches"))
 	localStorage.setItem("searches", JSON.stringify([]));
@@ -33,17 +34,39 @@ searchBtn.addEventListener("click", searchWord);
 searchInput.addEventListener("keydown", (e) => {
 	if (e.key == "Enter") searchWord();
 });
+// async function searchAndDisplay(word) {
+// 	try {
+// 		const data = await fetch(`${URL}${word}`);
+// 		const res = (await data.json())[0];
+// 		const meaning = res.meanings[0].definitions[0].definition;
+// 		const example = res.meanings[0].definitions[0].example ?? "";
+// 		const audio = res.phonetics.filter((cur) => cur.audio)?.[0]?.audio;
+// 		const wordObj = { word, meaning, audio, example };
+// 		result.id = "";
+// 		result.style.display = "block";
+// 		addToStorage(wordObj);
+// 		displayWord(wordObj);
+// 	} catch (e) {
+// 		console.log(e);
+// 		result.id = "";
+// 		result.innerHTML = `No such word found: <span id="not-a-word">${word}</span>`;
+// 	}
+// }
+// searchAndDisplay("bye");
 async function searchAndDisplay(word) {
 	try {
 		const data = await fetch(`${URL}${word}`);
-		const res = (await data.json())[0];
-		const meaning = res.meanings[0].definitions[0].definition;
-		const example = res.meanings[0].definitions[0].example ?? "";
-		const audio = res.phonetics.filter((cur) => cur.audio)?.[0]?.audio;
-		const wordObj = { word, meaning, audio, example };
+		const res = await data.json();
+		if (res.title) {
+			throw new Error("Not Found");
+		}
+		const meanings = res.map((item) => item.meanings[0]);
+		const sampleMeaning = meanings[0].definitions[0].definition;
+		const audio = res[0].phonetics.filter((cur) => cur.audio)?.[0]?.audio;
+		const wordObj = { word, meanings, audio };
 		result.id = "";
 		result.style.display = "block";
-		addToStorage(wordObj);
+		addToStorage({ word, meaning: sampleMeaning });
 		displayWord(wordObj);
 	} catch (e) {
 		console.log(e);
@@ -51,7 +74,6 @@ async function searchAndDisplay(word) {
 		result.innerHTML = `No such word found: <span id="not-a-word">${word}</span>`;
 	}
 }
-
 function addToStorage(obj) {
 	let words = JSON.parse(localStorage.getItem("searches"));
 	let i = words.findIndex((item) => item.word == obj.word);
@@ -59,26 +81,55 @@ function addToStorage(obj) {
 	words = [obj, ...words];
 	localStorage.setItem("searches", JSON.stringify(words));
 }
-function displayWord({ word, meaning, audio, example }) {
+function displayWord({ word, meanings, audio }) {
 	let audioHtml = `
         <button onClick="handleAudioclick('${audio}')">
             <audio id="play-btn" src="${audio}"></audio>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512"><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c7.6-4.2 16.8-4.1 24.3 .5l144 88c7.1 4.4 11.5 12.1 11.5 20.5s-4.4 16.1-11.5 20.5l-144 88c-7.4 4.5-16.7 4.7-24.3 .5s-12.3-12.2-12.3-20.9V168c0-8.7 4.7-16.7 12.3-20.9z"/></svg>
         </button>
     `;
-	let exampleHtml = `<p class="example"><span>Example: </span>${example}</p>`;
+
 	let html = `
-        <div class="header">
-            <h2>${word}</h2>
-            ${audio ? '<p class="audio">' + audioHtml + "</p>" : ""}
-        </div>
-        <p class="meaning">
-            <span>Meaning: </span>${meaning}
-        </p>
-        ${example && exampleHtml}
-    `;
-	result.innerHTML = html;
+	<div class="header">
+	<h2>${word}</h2>
+	${audio ? '<p class="audio">' + audioHtml + "</p>" : ""}
+	</div><ul>`;
+	meanings.forEach((item, index) => {
+		let example = item.definitions[0].example;
+		let exampleHtml = `<p class="example"><span>Example: </span>${example}</p>`;
+		let speech =
+			item.partOfSpeech.charAt(0).toUpperCase() +
+			item.partOfSpeech.slice(1).toLowerCase();
+		html += `
+			<li class="meaning">
+				<p><span>Part of speech: </span>${speech}</p>
+				<p><span>Meaning: </span>${item.definitions[0].definition}</p>
+				${example ? exampleHtml : ""}
+			</li>
+		`;
+	});
+	result.innerHTML = html + "</ul>";
 }
+// function displayWord({ word, meaning, audio, example }) {
+// 	let audioHtml = `
+//         <button onClick="handleAudioclick('${audio}')">
+//             <audio id="play-btn" src="${audio}"></audio>
+//             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512"><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM188.3 147.1c7.6-4.2 16.8-4.1 24.3 .5l144 88c7.1 4.4 11.5 12.1 11.5 20.5s-4.4 16.1-11.5 20.5l-144 88c-7.4 4.5-16.7 4.7-24.3 .5s-12.3-12.2-12.3-20.9V168c0-8.7 4.7-16.7 12.3-20.9z"/></svg>
+//         </button>
+//     `;
+// 	let exampleHtml = `<p class="example"><span>Example: </span>${example}</p>`;
+// 	let html = `
+//         <div class="header">
+//             <h2>${word}</h2>
+//             ${audio ? '<p class="audio">' + audioHtml + "</p>" : ""}
+//         </div>
+//         <p class="meaning">
+//             <span>Meaning: </span>${meaning}
+//         </p>
+//         ${example && exampleHtml}
+//     `;
+// 	result.innerHTML = html;
+// }
 function handleAudioclick(url) {
 	document.querySelector("#play-btn").play();
 }
@@ -152,3 +203,29 @@ function deleteCard(index, word) {
 		}
 	});
 }
+
+async function generateRandomWord() {
+	const data = await (
+		await fetch("https://random-word-api.herokuapp.com/word")
+	).json();
+	let word = data[0];
+	result.innerHTML = "";
+	result.id = "loader";
+	word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	searchInput.value = "";
+	const dictResult = await fetch(`${URL}${word}`);
+	const res = await dictResult.json();
+	if (res.title) {
+		generateRandomWord();
+	}
+	const meanings = res.map((item) => item.meanings[0]);
+	const sampleMeaning = meanings[0].definitions[0].definition;
+	const audio = res[0].phonetics.filter((cur) => cur.audio)?.[0]?.audio;
+	const wordObj = { word, meanings, audio };
+	result.id = "";
+	result.style.display = "block";
+	addToStorage({ word, meaning: sampleMeaning });
+	displayWord(wordObj);
+}
+
+randomWordButton.addEventListener("click", generateRandomWord);
