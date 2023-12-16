@@ -13,6 +13,8 @@
 body {
 	background-color: var(--blue-color);
 	color: var(--black-color);
+	padding-left: 20px;
+	padding-right: 20px;
 }
 body::-webkit-scrollbar {
 	width: 12px;
@@ -163,6 +165,7 @@ nav button:hover {
 #loader {
 	border: 10px solid #f3f3f3;
 	border-top: 10px solid #3498db;
+	background-color: transparent;
 	border-radius: 50%;
 	width: 20px;
 	height: 20px;
@@ -181,6 +184,7 @@ nav button:hover {
 .result .header {
 	display: flex;
 	flex-direction: row;
+	gap: 20px;
 	align-items: center;
 	justify-content: center;
 }
@@ -393,7 +397,7 @@ nav button:hover {
 		font-size: 16px;
 	}
 	.search-box button {
-		right: 2px;
+		right: 0px;
 		font-size: 24px;
 	}
 	#random {
@@ -402,12 +406,122 @@ nav button:hover {
 	#random svg {
 		position: absolute;
 		right: 22px;
-		top: 13px;
+		top: 9px;
 		height: 22px;
 		width: 22px;
 		fill: var(--red-color);
 	}
 	.result {
 		margin: 40px auto;
+	}
+}
+@media only screen and (max-width: 600px) {
+	nav h1 {
+		font-size: 16px;
+		padding: 12px 20px;
+	}
+	nav button,
+	nav a {
+		font-size: 12px;
+		padding: 5px 12px;
+	}
+	.search-container {
+		width: 280px;
+	}
+	.search-container p {
+		font-size: 20px;
+	}
+	.search-container input {
+		font-size: 12px;
+		padding: 10px 22px;
+	}
+	.search-box button {
+		font-size: 20px;
+		padding: 5px 22px;
+	}
+	#loader {
+		border: 6px solid #f3f3f3;
+		border-top: 6px solid #3498db;
+		width: 15px;
+		height: 15px;
+		padding: 15px;
+		margin-top: 50px;
+	}
+	.result {
+		font-size: 16px;
+	}
+	.result h2 {
+		font-size: 25px;
+	}
+	.result .header {
+		gap: 10px;
+	}
+}
+@media only screen and (max-width: 450px) {
+	nav a {
+		display: none;
+	}
+	nav {
+		display: grid;
+		grid-template-columns: 4fr 1fr;
+		margin: 25px 20px 10px;
+		text-align: center;
+	}
+	nav h1 {
+		font-size: 14px;
+		padding: 12px 18px;
+	}
+	nav button {
+		font-size: 10px;
+		padding: 5px 12px;
+	}
+	.search-container {
+		width: 200px;
+	}
+	.search-container p {
+		font-size: 14px;
+	}
+	#random {
+		padding: 6px 40px 6px 20px;
+	}
+	#random svg {
+		position: absolute;
+		right: 16px;
+		top: 8px;
+		height: 16px;
+		width: 14px;
+		fill: var(--red-color);
+	}
+}
+@media only screen and (max-width: 350px) {
+	body {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	nav {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 15px;
+		margin: 25px 20px 10px;
+		text-align: center;
+	}
+	.search-container {
+		padding: 30px 20px;
+		width: 200px;
+	}
+	.search-box button {
+		padding: 5px 15px;
+	}
+	.search-container input {
+		padding: 10px 18px;
+	}
+	.result h2 {
+		font-size: 20px;
+	}
+	.result {
+		font-size: 14px;
+	}
+	.word {
+		min-width: 165px;
 	}
 }
