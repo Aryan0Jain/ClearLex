@@ -64,7 +64,6 @@ nav .buttons {
 	margin: auto;
 }
 nav button {
-	width: 140px;
 	background: transparent;
 	background-color: var(--grey-color);
 	border: none;
@@ -85,16 +84,17 @@ nav button:hover {
 	margin: auto;
 	margin-top: 70px;
 	padding: 30px 40px;
-	border-radius: 10px;
+	border-radius: 25px;
 	text-align: center;
 	font-size: 30px;
 }
 .search-box {
 	position: relative;
-	margin: auto 20px;
+	margin: auto 4%;
 }
 .search-container input {
-	width: 90%;
+	box-sizing: border-box;
+	width: 92%;
 	margin: 35px auto;
 	border-radius: 50px;
 	border: none;
@@ -109,11 +109,13 @@ nav button:hover {
 }
 .search-box button {
 	position: absolute;
-	right: 32px;
-	bottom: 39px;
+	right: 30px;
+	bottom: 36px;
 	font-size: 28px;
 	border: none;
-	background-color: transparent;
+	background-color: var(--black-color);
+	border-radius: 50px;
+	padding: 5px 25px;
 	color: var(--red-color);
 	cursor: pointer;
 }
@@ -208,13 +210,13 @@ nav button:hover {
 }
 .words {
 	display: flex;
-	gap: 25px;
+	gap: 20px;
 	flex-wrap: wrap;
 	padding: 50px;
 	justify-content: center;
 }
 .word {
-	width: 250px;
+	width: 150px;
 	padding: 25px 25px;
 	background-color: var(--black-color);
 	border-radius: 20px;
@@ -227,7 +229,7 @@ nav button:hover {
 }
 .word .title {
 	color: var(--red-color);
-	font-size: 24px;
+	font-size: 16px;
 	font-weight: 500;
 	cursor: pointer;
 	/* text-decoration: underline; */
@@ -243,7 +245,7 @@ nav button:hover {
 .word button {
 	background-color: transparent;
 	border: none;
-	font-size: 22px;
+	font-size: 20px;
 	color: var(--red-color);
 	cursor: pointer;
 	transition: all 150ms;
@@ -254,14 +256,15 @@ nav button:hover {
 .word .meaning {
 	margin-top: 20px;
 	color: var(--grey-color);
-	font-size: 20px;
-	height: 240px;
+	font-size: 16px;
+	height: 170px;
 	/* overflow-y: auto;
 	scroll-behavior: smooth; */
+	text-align: left;
 	line-height: 1.2;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 10;
+	-webkit-line-clamp: 9;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -318,4 +321,36 @@ nav button:hover {
 .confirm .buttons .no {
 	background-color: var(--red-color);
 	color: var(--grey-color);
+}
+
+/* Media queries */
+@media only screen and (max-width: 1000px) {
+	nav h1 {
+		font-size: 25px;
+	}
+	nav button,
+	nav a {
+		font-size: 20px;
+		cursor: pointer;
+		padding: 5px 20px;
+		border-radius: 25px;
+	}
+	.search-container {
+		background-color: var(--grey-color);
+		width: 450px;
+		font-size: 30px;
+		margin-top: 40px;
+	}
+	.search-container input {
+		width: 100%;
+	}
+	.search-box {
+		margin: auto 0;
+	}
+	.search-box button {
+		right: 0;
+	}
+	.result {
+		margin-top: 40px;
+	}
 }
